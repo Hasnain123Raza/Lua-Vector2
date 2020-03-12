@@ -66,7 +66,7 @@
 --]]
 
 
-local MODULE = {}
+local Vector2 = {}
 
 --// METAMETHODS //--
 
@@ -76,10 +76,10 @@ end
 
 local function add(self, value)
 	if (type(value) == "number") then
-		return MODULE.addScalar(self, value)
+		return Vector2.addScalar(self, value)
 	elseif (type(value) == "table") then
 		if (value.className) and (value.className == "Vector2") then
-			return MODULE.addVectors(self, value)
+			return Vector2.addVectors(self, value)
 		else
 			error("attempt to perform arithmetic (add) on " .. self.className .. " and unknown")
 		end
@@ -90,10 +90,10 @@ end
 
 local function sub(self, value)
 	if (type(value) == "number") then
-		return MODULE.subtractScalar(self, value)
+		return Vector2.subtractScalar(self, value)
 	elseif (type(value) == "table") then
 		if (value.className) and (value.className == "Vector2") then
-			return MODULE.subtractVectors(self, value)
+			return Vector2.subtractVectors(self, value)
 		else
 			error("attempt to perform arithmetic (subtract) on " .. self.className .. " and unknown")
 		end
@@ -104,10 +104,10 @@ end
 
 local function mul(self, value)
 	if (type(value) == "number") then
-		return MODULE.multiplyScalar(self, value)
+		return Vector2.multiplyScalar(self, value)
 	elseif (type(value) == "table") then
 		if (value.className) and (value.className == "Vector2") then
-			return MODULE.multiplyVectors(self, value)
+			return Vector2.multiplyVectors(self, value)
 		else
 			error("attempt to perform arithmetic (multiply) on " .. self.className .. " and unknown")
 		end
@@ -118,10 +118,10 @@ end
 
 local function div(self, value)
 	if (type(value) == "number") then
-		return MODULE.divideScalar(self, value)
+		return Vector2.divideScalar(self, value)
 	elseif (type(value) == "table") then
 		if (value.className) and (value.className == "Vector2") then
-			return MODULE.divideVectors(self, value)
+			return Vector2.divideVectors(self, value)
 		else
 			error("attempt to perform arithmetic (divide) on " .. self.className .. " and unknown")
 		end
@@ -135,12 +135,12 @@ local function tostringMetamethod(self)
 end
 
 local function eq(self, value)
-	return MODULE.equals(self, value, 0.01)
+	return Vector2.equals(self, value, 0.01)
 end
 
 --// CONSTRUCTOR //--
 
-function MODULE.new(x, y)
+function Vector2.new(x, y)
 
 	-- Handles Input --
 	if (x) and (type(x) ~= "number") then error("number expected, got " .. type(x)) end
@@ -153,7 +153,7 @@ function MODULE.new(x, y)
 			y = y or 0,
 			className = "Vector2"
 		},
-		MODULE
+		Vector2
 	)
 	
 	local proxyTable = setmetatable(
@@ -163,9 +163,9 @@ function MODULE.new(x, y)
 		{
 			__index = function(self, index)
 				if (index == "magnitude") then
-					return MODULE.getMagnitude(self)
+					return Vector2.getMagnitude(self)
 				elseif (index == "unit") then
-					return MODULE.getUnitVector(self)
+					return Vector2.getUnitVector(self)
 				else
 					return (dataTable[index])
 				end
@@ -199,60 +199,60 @@ end
 
 --// METHODS //--
 
-function MODULE.addVectors(firstVector2, secondVector2)
-	return MODULE.new(firstVector2.x + secondVector2.x, firstVector2.y + secondVector2.y)
+function Vector2.addVectors(firstVector2, secondVector2)
+	return Vector2.new(firstVector2.x + secondVector2.x, firstVector2.y + secondVector2.y)
 end
 
-function MODULE.subtractVectors(firstVector2, secondVector2)
-	return MODULE.new(firstVector2.x - secondVector2.x, firstVector2.y - secondVector2.y)
+function Vector2.subtractVectors(firstVector2, secondVector2)
+	return Vector2.new(firstVector2.x - secondVector2.x, firstVector2.y - secondVector2.y)
 end
 
-function MODULE.multiplyVectors(firstVector2, secondVector2)
-	return MODULE.new(firstVector2.x * secondVector2.x, firstVector2.y * secondVector2.y)
+function Vector2.multiplyVectors(firstVector2, secondVector2)
+	return Vector2.new(firstVector2.x * secondVector2.x, firstVector2.y * secondVector2.y)
 end
 
-function MODULE.divideVectors(firstVector2, secondVector2)
-	return MODULE.new(firstVector2.x / secondVector2.x, firstVector2.y / secondVector2.y)
+function Vector2.divideVectors(firstVector2, secondVector2)
+	return Vector2.new(firstVector2.x / secondVector2.x, firstVector2.y / secondVector2.y)
 end
 
-function MODULE.addScalar(vector2, scalar)
-	return MODULE.new(vector2.x + scalar, vector2.y + scalar)
+function Vector2.addScalar(vector2, scalar)
+	return Vector2.new(vector2.x + scalar, vector2.y + scalar)
 end
 
-function MODULE.subtractScalar(vector2, scalar)
-	return MODULE.new(vector2.x - scalar, vector2.y - scalar)
+function Vector2.subtractScalar(vector2, scalar)
+	return Vector2.new(vector2.x - scalar, vector2.y - scalar)
 end
 
-function MODULE.multiplyScalar(vector2, scalar)
-	return MODULE.new(vector2.x * scalar, vector2.y * scalar)
+function Vector2.multiplyScalar(vector2, scalar)
+	return Vector2.new(vector2.x * scalar, vector2.y * scalar)
 end
 
-function MODULE.divideScalar(vector2, scalar)
-	return MODULE.new(vector2.x / scalar, vector2.y / scalar)
+function Vector2.divideScalar(vector2, scalar)
+	return Vector2.new(vector2.x / scalar, vector2.y / scalar)
 end
 
-function MODULE.mapVector(vector2, mapFunction)
+function Vector2.mapVector(vector2, mapFunction)
 	local x, y = mapFunction(vector2.x, vector2.y)
-	return MODULE.new(x, y)
+	return Vector2.new(x, y)
 end
 
-function MODULE.equals(firstVector2, secondVector2, epsilon)
+function Vector2.equals(firstVector2, secondVector2, epsilon)
 	return ((firstVector2 - secondVector2).magnitude < epsilon)
 end
 
-function MODULE.getMagnitude(vector2)
+function Vector2.getMagnitude(vector2)
 	return math.sqrt(
 		vector2.x^2 +
 		vector2.y^2
 	)
 end
 
-function MODULE.getUnitVector(vector2)
+function Vector2.getUnitVector(vector2)
 	return (vector2/vector2.magnitude)
 end
 
 --// INSTRUCTIONS //--
 
-MODULE.__index = MODULE
+Vector2.__index = Vector2
 
-return MODULE
+return Vector2
